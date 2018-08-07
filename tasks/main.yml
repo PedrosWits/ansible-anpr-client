@@ -1,0 +1,18 @@
+---
+# tasks file for anpr-mssql-server
+# Assumes volumes are aivalable/attached
+
+- name: Clone anpr-mssql-client git repository
+  git:
+    repo: 'https://github.com/PedrosWits/anpr-mssql-client.git'
+    dest: "{{ destination }}"
+    clone: yes
+  ignore_errors: yes
+
+- name: Run make install
+  make:
+    chdir: "{{ destination }}"
+    target: install
+
+- name: "Pull docker image"
+  command: "{{ destination }}/ENV/bin/python {{ destination }}/client.py pull-image"
